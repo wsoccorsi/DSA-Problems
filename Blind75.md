@@ -108,3 +108,40 @@ class Solution:
 
 * Use a sliding window and while we have the correct substring make the window smaller, if not continue adding to it
 * This uses a fun O(26) implemention, essentially the for loops don't add any time complexity due to alpha
+
+
+# 20. Valid Parentheses
+
+```
+class Solution:
+    def isValid(self, s: str) -> bool:
+        """
+        paren_stack = []
+        [] <-- if opening parem add to stack
+        [] <-- if matching closing parem pop open from stack
+        closing_brackets = { ')' : '(', '}' : '{', ']':'[' }
+        return len(paren_stack) == 0
+
+        s = "({[}])"
+        [ ({ ] <-- returns false
+
+        """
+
+        paren_stack = []
+        closing_brackets = { ')' : '(', '}' : '{', ']':'[' }
+
+        for bracket in s:
+            if bracket not in closing_brackets:
+                paren_stack.append(bracket)
+            elif paren_stack and paren_stack[-1] == closing_brackets[bracket]:
+                paren_stack.pop()
+            else:
+                return False
+        
+        return len(paren_stack) == 0
+```
+
+* Simple stack, when the top of the stack does not have the opening bracket return false
+* Else check to see whether the stack is empty (this would mean all matches have been found)
+* I messed up on the immediate returning false bit, this is important as once there is no match
+the solution can never be true ie [']]]]]]'] is False
