@@ -1,11 +1,5 @@
 # 424. Longest Repeating Character Replacement
 
-Prompt: You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. 
-You can perform this operation at most k times.
-Return the length of the longest substring containing the same letter you can get after performing the above operations.
-
-
-Answer:
 ```
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
@@ -49,10 +43,6 @@ class Solution:
 
 # 76. Minimum Window Substring
 
-Prompt: Given two strings s and t of lengths m and n respectively, return the minimum window 
-substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
-
-Answer:
 ```
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
@@ -112,11 +102,6 @@ class Solution:
 
 # 20. Valid Parentheses
 
-Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
-An input string is valid if:
-Open brackets must be closed by the same type of brackets.
-Open brackets must be closed in the correct order.
-Every close bracket has a corresponding open bracket of the same type.
 
 ```
 class Solution:
@@ -151,3 +136,69 @@ class Solution:
 * Else check to see whether the stack is empty (this would mean all matches have been found)
 * I messed up on the immediate returning false bit, this is important as once there is no match
 the solution can never be true ie [']]]]]]'] is False
+
+
+
+# 33. Search in Rotated Sorted Array
+
+```
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        """Augmented binary search, 
+        if the left is sorted and contains the range of our number call binary
+        search
+        else shift to other half
+
+        if the right is sorted and container the range of our number call binary 
+        search
+        else shift this binary search to the other half
+        """
+        l = 0
+        r = len(nums) - 1
+
+        while l <= r:
+            mid = (l + r) // 2
+            if nums[mid] == target:
+                return mid
+            
+            # check if right is sorted and target is in range
+            if nums[l] <= nums[mid]:
+                if nums[l] <= target <= nums[mid]:
+                    return self._binary_search(nums, l, r, target)
+                # else its in the right hand side
+                else:
+                    l = mid + 1
+
+            # check if right is sorted and target is in range
+            if nums[mid] <= nums[r]:
+                if nums[mid] <= target <= nums[r]:
+                    return self._binary_search(nums, l, r, target)
+                # else its in the left hand side
+                else:
+                    r = mid - 1
+        return -1
+
+    def _binary_search(self, arr, l, r, t) -> int:
+        """Simple binary search algorithm"""
+        while l <= r:
+            mid = (l + r) // 2
+            if arr[mid] == t:
+                return mid
+            
+            if arr[mid] > t:
+                r = mid - 1
+            else:
+                l = mid + 1
+
+        return -1 
+```
+
+* This is a binary search approach where I am constantly changing the window and attempting to find the
+appropriate place to begin binary search
+* In algoexpert and other solutions the use of this `binary_search` helper method is excluded but, 
+if focusing on solving the problem from "is the array sorted and is my target present" I felt it 
+makes more sense.
+* TLDR; One side is sorted and the other is not, check the sorted side to see if my target is in the range
+if it is not then it must be in the other half, essentially "recursively" run this same algorithm but
+now on the unsorted side. Split this unsorted side in half, out of the two sides, which one is sorted?
+Begin the same logic over and over.
