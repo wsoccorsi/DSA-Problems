@@ -202,3 +202,40 @@ makes more sense.
 if it is not then it must be in the other half, essentially "recursively" run this same algorithm but
 now on the unsorted side. Split this unsorted side in half, out of the two sides, which one is sorted?
 Begin the same logic over and over.
+
+
+# 153. Find Minimum in Sorted Array
+
+```
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        """
+        Augmented binary search, looking for the begining of
+        the sorted array
+
+        [4,5,6,7,0,1,2]
+               ^
+        
+        """
+
+        l = 0
+        r = len(nums) - 1
+        min_num_found = 2 ** 32 
+
+        while l <= r:
+            mid = (l + r) // 2
+            # check if right is sorted and target is in range
+            if nums[l] <= nums[mid]:
+                min_num_found = min(nums[l], min_num_found)
+                l = mid + 1
+            # check if right is sorted and target is in range
+            if nums[mid] <= nums[r]:
+                min_num_found = min(nums[mid], min_num_found)
+                r = mid - 1
+                
+
+        return min_num_found
+```
+
+* Same idea as above but a bit more elegant, and only checking the beginning
+of every sorted half
