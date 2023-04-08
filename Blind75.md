@@ -239,3 +239,88 @@ class Solution:
 
 * Same idea as above but a bit more elegant, and only checking the beginning
 of every sorted half
+
+
+# 21. Merge Two Sorted Lists
+
+```
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        """ 
+        1 > 2 > 4
+        1 > 3 > 4
+
+        1 > 1 > 2 > 3 > 4 > 4
+
+        picking the first list
+
+        # merge
+        while l1:
+            if l1.val >= l2.val and l1.next != None and l2.val <= l1.next.val:
+                1 > 1 > 2 > 4
+                3 > 4
+
+
+        # append remaining and return
+        while l2:
+            # append l2 to l1
+        
+        return l1_head
+
+        """
+        if not list1:
+            return list2
+        if not list2:
+            return list1
+
+        l1_tail = list1
+        while l1_tail.next:
+            l1_tail = l1_tail.next
+
+        l1_head = list1
+
+        prev_list1 = None
+        while list1:
+            while (list1 != None and list2 != None) and list1.val > list2.val: 
+                if not prev_list1:
+                    l1_head = list2
+                    temp_list2 = list2.next
+                    list2.next = list1
+                    prev_list1 = list2
+                    list2 = temp_list2
+                    continue
+
+                temp_list2 = list2.next
+                prev_list1.next = list2
+                list2.next = list1
+
+                prev_list1 = list2
+                list2 = temp_list2
+
+            # iterate
+            prev_list1 = list1
+            list1 = list1.next
+        
+        
+        l1_tail.next = list2
+
+        return l1_head
+
+    def _print_list(self, l):
+        curr = l
+        rep = ''
+        while curr:
+            rep += str(curr.val) + ' > '
+            curr = curr.next
+        print(rep)
+            
+```
+
+* Pick one list to merge into
+* Draw out picture
+* Edge case where we need to set a new head of the list
