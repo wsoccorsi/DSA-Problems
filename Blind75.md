@@ -324,3 +324,76 @@ class Solution:
 * Pick one list to merge into
 * Draw out picture
 * Edge case where we need to set a new head of the list
+
+# 143. Reorder List
+
+```
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+
+        in_order_first_half, reversed_second_half = self._split_in_half(head)
+
+        curr_node_n = reversed_second_half
+        curr_node_i = in_order_first_half
+        while curr_node_i:
+            if not curr_node_i.next:
+                curr_node_i.next = curr_node_n
+                return head
+
+            temp_i = curr_node_i.next
+            temp_n = curr_node_n.next
+
+            curr_node_i.next = curr_node_n
+            curr_node_n.next = temp_i
+
+            curr_node_i = temp_i
+            curr_node_n = temp_n
+        return head
+
+    def _split_in_half(self, head):
+        list_len = self._size_of_list(head)
+        mid = list_len // 2
+        in_order_first_half = head
+        for _ in range(1, mid):
+            head = head.next
+
+        temp = head.next
+        head.next = None
+        head = temp
+
+        # Reverse last half
+        prev = None
+        while head:
+            temp = head.next
+            head.next = prev
+            prev = head
+            head = temp
+        reversed_second_half = prev
+        return in_order_first_half, reversed_second_half
+        
+    def _size_of_list(self, head):
+        size_of_list = 0
+        while head:
+            size_of_list += 1
+            head = head.next
+        return size_of_list
+    
+    def _print_list(self, head):
+        rep = ''
+        while head:
+            rep += str(head.val) + ' > '
+            head = head.next
+        print(rep)
+```
+
+* The trick here is to create two lists
+* The first half in order and the second half reversed
+* This will be O(n) time (1) mem
